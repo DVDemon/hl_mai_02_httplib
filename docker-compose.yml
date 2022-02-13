@@ -4,7 +4,7 @@ services:
     web:
         build:
         # build from Dockerfile
-            context: server
+            context: my_server
             dockerfile: Dockerfile
         container_name: web-node-1
         ports:

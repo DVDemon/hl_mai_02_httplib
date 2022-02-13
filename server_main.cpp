@@ -2,13 +2,28 @@
 #include "httplib.h"
 
 // https://github.com/yhirose/cpp-httplib
+
+
+
+std::string dump_headers(const httplib::Headers &headers) {
+  std::string s;
+  char buf[BUFSIZ];
+
+  for (auto it = headers.begin(); it != headers.end(); ++it) {
+    const auto &x = *it;
+    snprintf(buf, sizeof(buf), "%s: %s\n", x.first.c_str(), x.second.c_str());
+    s += buf;
+  }
+
+  return s;
+}
 auto main() -> int
 {
     httplib::Server svr;
     svr.Get("/hi", [](const httplib::Request &req, httplib::Response &res)
             { 
                
-                res.set_content("Hello World! "+req.target, "text/plain"); 
+                res.set_content(dump_headers(req.headers), "text/plain"); 
             });
     
     svr.Get(R"(/numbers/(\d+))", [&](const httplib::Request &req, httplib::Response &res)
