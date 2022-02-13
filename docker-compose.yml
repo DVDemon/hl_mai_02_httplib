@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+    web:
+        build:
+        # build from Dockerfile
+            context: server
+            dockerfile: Dockerfile
+        container_name: web-node-1
+        ports:
+          - "8080:8080" 
+        networks:
+            - my_network
+    ngnix-server:
+        image: nginx:1.13
+        ports: 
+            - "1234:80"
+        volumes: 
+            - ./conf.d:/etc/nginx/conf.d
+        networks:
+            - my_network
+networks:
+    my_network: 

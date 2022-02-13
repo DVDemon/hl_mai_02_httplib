@@ -5,8 +5,10 @@
 auto main() -> int
 {
     httplib::Server svr;
-    svr.Get("/hi", [](const httplib::Request &, httplib::Response &res)
-            { res.set_content("Hello World!", "text/plain"); 
+    svr.Get("/hi", [](const httplib::Request &req, httplib::Response &res)
+            { 
+               
+                res.set_content("Hello World! "+req.target, "text/plain"); 
             });
     
     svr.Get(R"(/numbers/(\d+))", [&](const httplib::Request &req, httplib::Response &res)
