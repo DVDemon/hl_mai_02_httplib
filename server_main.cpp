@@ -1,7 +1,6 @@
 #include <iostream>
+#include <cstdlib>
 #include "httplib.h"
-
-// https://github.com/yhirose/cpp-httplib
 
 
 
@@ -17,13 +16,18 @@ std::string dump_headers(const httplib::Headers &headers) {
 
   return s;
 }
+
 auto main() -> int
 {
+    const char* env_p = std::getenv("SERVER_NAME");
     httplib::Server svr;
-    svr.Get("/hi", [](const httplib::Request &req, httplib::Response &res)
-            { 
-               
-                res.set_content(dump_headers(req.headers), "text/plain"); 
+
+    svr.Get("/hi", [env_p](const httplib::Request &req, httplib::Response &res)
+            {       
+                std::string content = "Hello from ";
+                content +=env_p;
+                  
+                res.set_content(content, "text/plain"); 
             });
     
     svr.Get(R"(/numbers/(\d+))", [&](const httplib::Request &req, httplib::Response &res)
