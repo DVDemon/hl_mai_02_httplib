@@ -3,30 +3,38 @@ version: "3.7"
 services:
     web1:
         build:
-        # build from Dockerfile
             context: my_server
             dockerfile: Dockerfile
         container_name: web-node-1
-        ports:
-          - "8080:8080" 
         environment:
             - SERVER_NAME=web1
         networks:
             - my_network
     web2:
         build:
-        # build from Dockerfile
             context: my_server
             dockerfile: Dockerfile
         container_name: web-node-2
-        ports:
-          - "8081:8080" 
         environment:
             - SERVER_NAME=web2
         networks:
             - my_network    
+    web3:
+        build:
+            context: my_server
+            dockerfile: Dockerfile
+        container_name: web-node-3
+        environment:
+             - SERVER_NAME=web3
+        networks:
+            - my_network   
     ngnix-server:
         image: nginx:1.13
+        container_name: nginx
+        depends_on:
+            - web1
+            - web2
+            - web3
         ports: 
             - "1234:80"
         volumes: 
